@@ -12,11 +12,8 @@ namespace form_idle
 {
     public partial class Form1 : Form
     {
-        double num=0,cnum,result;
+        double num = 0, cnum, result;
         string state, memory;
-
-        
-
 
         public Form1()
         {
@@ -39,12 +36,12 @@ namespace form_idle
             update();
         }
 
-
         private void bnum2_Click(object sender, EventArgs e)//2
         {
             textBox1.Text = Convert.ToString((Convert.ToDouble(textBox1.Text) * 10) + 2);
             update();
         }
+
         private void bnum3_Click(object sender, EventArgs e)//3
         {
             textBox1.Text = Convert.ToString((Convert.ToDouble(textBox1.Text) * 10) + 3);
@@ -96,7 +93,7 @@ namespace form_idle
 
         private void bplus_Click(object sender, EventArgs e)//+
         {
-            if (state == null) 
+            if (state == null)
             {
                 update();
                 state = "+";
@@ -105,7 +102,7 @@ namespace form_idle
                 label1.Text = Convert.ToString(cnum) + " +";
                 textBox1.Text = "0";
             }
-            else if (state != "+") 
+            else if (state != "+")
             {
                 state = "+";
                 label1.Text = Convert.ToString(cnum) + " +";
@@ -202,10 +199,10 @@ namespace form_idle
                     bdiv_Click(null, null);
                     break;
                 case Keys.Return:
-                    bsame_Click(null,null);
+                    bsame_Click(null, null);
                     break;
             }
-            
+
         }
 
         private void textBox1_KeyUp(object sender, KeyEventArgs e)
@@ -241,7 +238,8 @@ namespace form_idle
         private void bsame_Click(object sender, EventArgs e)//=
         {
             update();
-            switch (state) {
+            switch (state)
+            {
                 case "+":
                     result = cnum + num; //add
                     break;
