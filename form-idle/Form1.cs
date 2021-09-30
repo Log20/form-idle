@@ -13,23 +13,43 @@ namespace form_idle
     public partial class Form1 : Form
     {
         double num = 0, cnum, result;
-        string state, memory;
+        bool func, neg=false;
+        string state;
 
         public Form1()
         {
             InitializeComponent();
-            bmc.Enabled = false;
-            bmr.Enabled = false;
-            bmr.Visible = false;
-            bmc.Visible = false;
             textBox1.Text = Convert.ToString(num);
+            textBox1.Focus();
+            textBox1.SelectAll();
         }
 
         private void update()
         {
             num = Convert.ToDouble(textBox1.Text);
         }
+
+        private void textBox1_KeyPress(object sender, KeyPressEventArgs e)
+        {
+            if (!char.IsControl(e.KeyChar) && !char.IsDigit(e.KeyChar) &&
+                (e.KeyChar != '.'))
+            {
+                e.Handled = true;
+            }
+
+            // only allow one decimal point
+            if ((e.KeyChar == '.') && ((sender as TextBox).Text.IndexOf('.') > -1))
+            {
+                e.Handled = true;
+            }
+
+            if ((e.KeyChar == '-') && ((sender as TextBox).Text.IndexOf('-') > -1))
+            {
+                e.Handled = true;
+            }
+        }
         ///////////////////////////////////////////////////////////number
+        #region
         private void bnum1_Click(object sender, EventArgs e)//1
         {
             textBox1.Text = Convert.ToString((Convert.ToDouble(textBox1.Text) * 10) + 1);
@@ -89,8 +109,9 @@ namespace form_idle
             textBox1.Text = Convert.ToString((Convert.ToDouble(textBox1.Text) * 10) + 0);
             update();
         }
-        ///////////////////////////////////////////////////////////
-
+        #endregion
+        ///////////////////////////////////////////////////////////calculate
+        #region
         private void bplus_Click(object sender, EventArgs e)//+
         {
             if (state == null)
@@ -170,8 +191,9 @@ namespace form_idle
             textBox1.Focus();
             textBox1.SelectAll();
         }
-
-        ///////////////////////////////////////////////////////////utility
+        #endregion
+        ///////////////////////////////////////////////////////////control
+        #region
         private void bc_Click(object sender, EventArgs e)
         {
             cnum = 0;
@@ -202,7 +224,6 @@ namespace form_idle
                     bsame_Click(null, null);
                     break;
             }
-
         }
 
         private void textBox1_KeyUp(object sender, KeyEventArgs e)
@@ -228,6 +249,147 @@ namespace form_idle
             }
             update();
         }
+        #endregion
+        ///////////////////////////////////////////////////////////utility
+        #region
+        private void bxx_Click(object sender, EventArgs e)
+        {
+            if (func == false) textBox1.Text = Math.Pow(Convert.ToDouble(textBox1.Text), 2).ToString();
+            else textBox1.Text = Math.Pow(Convert.ToDouble(textBox1.Text), 3).ToString();
+            update();
+        }
+
+        private void bxn_Click(object sender, EventArgs e)
+        {
+            if (func == false)
+            {
+                if (state == null)
+                {
+                    update();
+                    state = "^";
+                    cnum = num;
+                    num = 0;
+                    label1.Text = Convert.ToString(cnum) + " ^";
+                    textBox1.Text = "0";
+                }
+                else if (state != "^")
+                {
+                    state = "^";
+                    label1.Text = Convert.ToString(cnum) + " ^";
+                }
+                textBox1.Focus();
+                textBox1.SelectAll();
+            }
+            else
+            {
+                if (state == null)
+                {
+                    update();
+                    state = "√";
+                    cnum = num;
+                    num = 0;
+                    label1.Text = Convert.ToString(cnum) + " √";
+                    textBox1.Text = "0";
+                }
+                else if (state != "√")
+                {
+                    state = "√";
+                    label1.Text = Convert.ToString(cnum) + " √";
+                }
+                textBox1.Focus();
+                textBox1.SelectAll();
+            }
+        }
+
+        private void bsin_Click(object sender, EventArgs e)
+        {
+            if (func == false) textBox1.Text = Math.Sin(Convert.ToDouble(textBox1.Text) * Math.PI / 180).ToString();
+            ///else 
+        }
+
+        private void bcos_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void btan_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void bdx_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void b10n_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void blog_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void bexp_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void bmod_Click(object sender, EventArgs e)
+        {
+
+        }
+        #endregion
+        private void bup_Click(object sender, EventArgs e)
+        {
+            if (func == false)
+            {
+                func = true;
+                bup.BackColor = SystemColors.ButtonShadow;
+                bxx.Text = "x³";
+                bxn.Text = "n√x";
+                bsin.Text = "sin⁻¹";
+                bcos.Text = "cos⁻¹";
+                btan.Text = "tan⁻¹";
+                bdx.Text = "1/x";
+                b10n.Text = "eⁿ";
+                blog.Text = "ln";
+                bexp.Text = "dms";
+                bmod.Text = "deg";
+            }
+            else
+            {
+                func = false;
+                bup.BackColor = SystemColors.ButtonFace;
+                bxx.Text = "x²";
+                bxn.Text = "xⁿ";
+                bsin.Text = "sin";
+                bcos.Text = "cos";
+                btan.Text = "tan";
+                bdx.Text = "√";
+                b10n.Text = "10ⁿ";
+                blog.Text = "log";
+                bexp.Text = "Exp";
+                bmod.Text = "Mod";
+            }
+            update();
+        }
+
+        private void bus_Click(object sender, EventArgs e)
+        {
+            if (neg == false)
+            {
+                textBox1.Text = "-" + textBox1.Text;
+                neg = true;
+            }
+            else
+            {
+                textBox1.Text.Replace("-", string.Empty);
+                neg = false;
+            }
+        }
 
         private void bce_Click(object sender, EventArgs e)
         {
@@ -251,6 +413,12 @@ namespace form_idle
                     break;
                 case "/":
                     result = cnum / num; //divide
+                    break;
+                case "^":
+                    result = Math.Pow(cnum, num);//power
+                    break;
+                case "√":
+                    result = Math.Pow(cnum, (1 / num));//root
                     break;
             }
             if (state != null)
