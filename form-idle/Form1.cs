@@ -13,8 +13,8 @@ namespace form_idle
     public partial class Form1 : Form
     {
         double num = 0, cnum, result;
-        bool func, neg=false;
-        string state;
+        bool func, neg = false;
+        string state, record;
 
         public Form1()
         {
@@ -23,12 +23,6 @@ namespace form_idle
             textBox1.Focus();
             textBox1.SelectAll();
         }
-
-        private void update()
-        {
-            num = Convert.ToDouble(textBox1.Text);
-        }
-
         private void textBox1_KeyPress(object sender, KeyPressEventArgs e)
         {
             if (!char.IsControl(e.KeyChar) && !char.IsDigit(e.KeyChar) &&
@@ -48,65 +42,158 @@ namespace form_idle
                 e.Handled = true;
             }
         }
+        ///////////////////////////////////////////////////////////events
+        #region
+        private void plus()
+        {
+            state = "plus";
+            cnum = num;
+            record = cnum + " +";
+            num = 0;
+            update();
+            recording();
+        }
+        private void minus()
+        {
+            state = "minus";
+            cnum = num;
+            record = cnum + " -";
+            num = 0;
+            update();
+            recording();
+        }
+        private void time()
+        {
+            state = "time";
+            cnum = num;
+            record = cnum + " x";
+            num = 0;
+            update();
+            recording();
+        }
+        private void divide()
+        {
+            state = "divide";
+            cnum = num;
+            record = cnum + " ÷";
+            num = 0;
+            update();
+            recording();
+        }
+        private void power()
+        {
+            state = "power";
+            cnum = num;
+            record = cnum + " ^";
+            num = 0;
+            update();
+            recording();
+        }
+        private void root()
+        {
+            state = "root";
+            cnum = num;
+            record = cnum + " √";
+            num = 0;
+            update();
+            recording();
+        }
+        private void calculate()
+        {
+            switch (state)
+            {
+                case "plus":
+                    result = cnum + num; //add
+                    break;
+                case "minus":
+                    result = cnum - num; //minus
+                    break;
+                case "time":
+                    result = cnum * num; //multiply
+                    break;
+                case "divide":
+                    result = cnum / num; //divide
+                    break;
+                case "power":
+                    result = Math.Pow(cnum, num);//power
+                    break;
+                case "root":
+                    result = Math.Pow(cnum, (1 / num));//root
+                    break;
+            }
+            if (state != null) historyBox.Items.Add(record + "=" + result.ToString());
+            state = null;
+
+        }
+        private void recording()
+        {
+            label1.Text += record;
+        }
+        private void update()
+        {
+            textBox1.Text = num.ToString();
+        }
+
+        #endregion
         ///////////////////////////////////////////////////////////number
         #region
         private void bnum1_Click(object sender, EventArgs e)//1
         {
-            textBox1.Text = Convert.ToString((Convert.ToDouble(textBox1.Text) * 10) + 1);
+            num = num * 10 + 1;
             update();
         }
 
         private void bnum2_Click(object sender, EventArgs e)//2
         {
-            textBox1.Text = Convert.ToString((Convert.ToDouble(textBox1.Text) * 10) + 2);
+            num = num * 10 + 2;
             update();
         }
 
         private void bnum3_Click(object sender, EventArgs e)//3
         {
-            textBox1.Text = Convert.ToString((Convert.ToDouble(textBox1.Text) * 10) + 3);
+            num = num * 10 + 3;
             update();
         }
 
         private void bnum4_Click(object sender, EventArgs e)//4
         {
-            textBox1.Text = Convert.ToString((Convert.ToDouble(textBox1.Text) * 10) + 4);
+            num = num * 10 + 4;
             update();
         }
 
         private void bnum5_Click(object sender, EventArgs e)//5
         {
-            textBox1.Text = Convert.ToString((Convert.ToDouble(textBox1.Text) * 10) + 5);
+            num = num * 10 + 5;
             update();
         }
 
         private void bnum6_Click(object sender, EventArgs e)//6
         {
-            textBox1.Text = Convert.ToString((Convert.ToDouble(textBox1.Text) * 10) + 6);
+            num = num * 10 + 6;
             update();
         }
 
         private void bnum7_Click(object sender, EventArgs e)//7
         {
-            textBox1.Text = Convert.ToString((Convert.ToDouble(textBox1.Text) * 10) + 7);
+            num = num * 10 + 7;
             update();
         }
 
         private void bnum8_Click(object sender, EventArgs e)//8
         {
-            textBox1.Text = Convert.ToString((Convert.ToDouble(textBox1.Text) * 10) + 8);
+            num = num * 10 + 8;
             update();
         }
 
         private void bnum9_Click(object sender, EventArgs e)//9
         {
-            textBox1.Text = Convert.ToString((Convert.ToDouble(textBox1.Text) * 10) + 9);
+            num = num * 10 + 9;
             update();
         }
 
         private void bnum0_Click(object sender, EventArgs e)//0
         {
-            textBox1.Text = Convert.ToString((Convert.ToDouble(textBox1.Text) * 10) + 0);
+            num = num * 10;
             update();
         }
         #endregion
@@ -303,23 +390,79 @@ namespace form_idle
 
         private void bsin_Click(object sender, EventArgs e)
         {
-            if (func == false) textBox1.Text = Math.Sin(Convert.ToDouble(textBox1.Text) * Math.PI / 180).ToString();
-            ///else 
+            double sin = 0;
+            if (func == false)
+            {
+                sin = (Math.Sin(Convert.ToDouble(textBox1.Text) % 360 * Math.PI / 180));
+                sin = Math.Floor(sin * 1000000) / 1000000;
+                textBox1.Text = Convert.ToString(sin);
+            }
+            else
+            {
+                sin = (Math.Asin(Convert.ToDouble(textBox1.Text) % 360 * Math.PI / 180));
+                sin = Math.Floor(sin * 1000000) / 1000000;
+                textBox1.Text = Convert.ToString(sin);
+            }
+
         }
 
         private void bcos_Click(object sender, EventArgs e)
         {
-
+            double cos = 0;
+            if (func == false)
+            {
+                cos = (Math.Cos(Convert.ToDouble(textBox1.Text) % 360 * Math.PI / 180));
+                cos = Math.Floor(cos * 1000000) / 1000000;
+                textBox1.Text = Convert.ToString(cos);
+            }
+            else
+            {
+                cos = (Math.Acos(Convert.ToDouble(textBox1.Text) % 360 * Math.PI / 180));
+                cos = Math.Floor(cos * 1000000) / 1000000;
+                textBox1.Text = Convert.ToString(cos);
+            }
         }
 
         private void btan_Click(object sender, EventArgs e)
         {
-
+            double tan = 0;
+            if (Convert.ToDouble(textBox1.Text) == 90 || Convert.ToDouble(textBox1.Text) == 270) textBox1.Text = "不存在";
+            else if (func == false)
+            {
+                tan = (Math.Tan(Convert.ToDouble(textBox1.Text) % 360 * Math.PI / 180));
+                tan = Math.Round(tan * 1000000) / 1000000;
+                textBox1.Text = Convert.ToString(tan);
+            }
+            else
+            {
+                tan = (Math.Atan(Convert.ToDouble(textBox1.Text) % 360 * Math.PI / 180));
+                tan = Math.Round(tan * 1000000) / 1000000;
+                textBox1.Text = Convert.ToString(tan);
+            }
         }
 
         private void bdx_Click(object sender, EventArgs e)
         {
-
+            if (func == false)
+            {
+                if (state == null)
+                {
+                    update();
+                    state = "√";
+                    cnum = num;
+                    num = 0;
+                    label1.Text = Convert.ToString(cnum) + " √";
+                    textBox1.Text = "0";
+                }
+                else if (state != "√")
+                {
+                    state = "√";
+                    label1.Text = Convert.ToString(cnum) + " √";
+                }
+                textBox1.Focus();
+                textBox1.SelectAll();
+            }
+            else { }
         }
 
         private void b10n_Click(object sender, EventArgs e)
@@ -399,39 +542,8 @@ namespace form_idle
 
         private void bsame_Click(object sender, EventArgs e)//=
         {
-            update();
-            switch (state)
-            {
-                case "+":
-                    result = cnum + num; //add
-                    break;
-                case "-":
-                    result = cnum - num; //minus
-                    break;
-                case "*":
-                    result = cnum * num; //multiply
-                    break;
-                case "/":
-                    result = cnum / num; //divide
-                    break;
-                case "^":
-                    result = Math.Pow(cnum, num);//power
-                    break;
-                case "√":
-                    result = Math.Pow(cnum, (1 / num));//root
-                    break;
-            }
-            if (state != null)
-            {
-                historyBox.Items.Add(cnum.ToString() + state + num.ToString() + "=" + result.ToString());
-            }
-            state = null;
-            cnum = 0;
-            num = result;
-            textBox1.Text = Convert.ToString(num);
-            label1.Text = null;
-            textBox1.SelectAll();
-            textBox1.Focus();
+            calculate();
         }
+
     }
 }
