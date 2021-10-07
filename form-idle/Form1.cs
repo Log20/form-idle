@@ -12,9 +12,9 @@ namespace form_idle
 {
     public partial class Form1 : Form
     {
-        double num = 0, cnum, result;
+        double num = 0, prev, result;
         bool func, neg = false;
-        string state, record;
+        string state, tempstate, temptext, record;
 
         public Form1()
         {
@@ -23,32 +23,53 @@ namespace form_idle
             textBox1.Focus();
             textBox1.SelectAll();
         }
-        private void textBox1_KeyPress(object sender, KeyPressEventArgs e)
+
+        //calculation state assignments
+        #region events
+        private void calculate()
         {
-            if (!char.IsControl(e.KeyChar) && !char.IsDigit(e.KeyChar) &&
-                (e.KeyChar != '.'))
+            switch (state)
             {
-                e.Handled = true;
+                case "plus":
+                    result = prev + num; //add
+                    break;
+                case "minus":
+                    result = prev - num; //minus
+                    break;
+                case "time":
+                    result = prev * num; //multiply
+                    break;
+                case "divide":
+                    result = prev / num; //divide
+                    break;
+                case "power":
+                    result = Math.Pow(prev, num);//power
+                    break;
+                case "root":
+                    result = Math.Pow(prev, (1 / num));//root
+                    break;
             }
-
-            // only allow one decimal point
-            if ((e.KeyChar == '.') && ((sender as TextBox).Text.IndexOf('.') > -1))
+            switch (tempstate)
             {
-                e.Handled = true;
+                case "exp":
+                    result = prev * Math.Pow(10, num);
+                    break;
+                default:
+                    break;
             }
-
-            if ((e.KeyChar == '-') && ((sender as TextBox).Text.IndexOf('-') > -1))
-            {
-                e.Handled = true;
-            }
-        }
-        ///////////////////////////////////////////////////////////events
-        #region
+            record += num;
+            if (state != null) historyBox.Items.Add(record + "=" + result.ToString());
+            num = result;
+            update();
+            state = null;
+            tempstate = null;
+            label1.Text = null;
+        } //calculate then put result in historybox and reset everything
         private void plus()
         {
             state = "plus";
-            cnum = num;
-            record = cnum + " +";
+            prev = num;
+            record = prev + "+";
             num = 0;
             update();
             recording();
@@ -56,8 +77,8 @@ namespace form_idle
         private void minus()
         {
             state = "minus";
-            cnum = num;
-            record = cnum + " -";
+            prev = num;
+            record = prev + "-";
             num = 0;
             update();
             recording();
@@ -65,8 +86,8 @@ namespace form_idle
         private void time()
         {
             state = "time";
-            cnum = num;
-            record = cnum + " x";
+            prev = num;
+            record = prev + "x";
             num = 0;
             update();
             recording();
@@ -74,8 +95,8 @@ namespace form_idle
         private void divide()
         {
             state = "divide";
-            cnum = num;
-            record = cnum + " ÷";
+            prev = num;
+            record = prev + "÷";
             num = 0;
             update();
             recording();
@@ -83,8 +104,8 @@ namespace form_idle
         private void power()
         {
             state = "power";
-            cnum = num;
-            record = cnum + " ^";
+            prev = num;
+            record = prev + "^";
             num = 0;
             update();
             recording();
@@ -92,93 +113,122 @@ namespace form_idle
         private void root()
         {
             state = "root";
-            cnum = num;
-            record = cnum + " √";
+            prev = num;
+            record = prev + "√";
             num = 0;
             update();
             recording();
         }
-        private void calculate()
-        {
-            switch (state)
-            {
-                case "plus":
-                    result = cnum + num; //add
-                    break;
-                case "minus":
-                    result = cnum - num; //minus
-                    break;
-                case "time":
-                    result = cnum * num; //multiply
-                    break;
-                case "divide":
-                    result = cnum / num; //divide
-                    break;
-                case "power":
-                    result = Math.Pow(cnum, num);//power
-                    break;
-                case "root":
-                    result = Math.Pow(cnum, (1 / num));//root
-                    break;
-            }
-            if (state != null) historyBox.Items.Add(record + "=" + result.ToString());
-            state = null;
-
-        }
         private void recording()
         {
             label1.Text += record;
-        }
+        } //record the current number and calculate state to label
         private void update()
         {
-            textBox1.Text = num.ToString();
+            if (tempstate == "exp") { textBox1.Text = temptext + num.ToString(); }
+            else textBox1.Text = num.ToString();
+        } //update textbox to be the same as num
+
+        #endregion  //calculation events
+        //calculation button press events
+        #region calc state
+        private void bplus_Click(object sender, EventArgs e)//+
+        {
+            if (state == null)
+            {
+                plus();
+            }
+            else if (state != "+")
+            {
+                calculate();
+                plus();
+            }
+            textBox1.Focus();
+            textBox1.SelectAll();
         }
 
+        private void bminus_Click(object sender, EventArgs e)//-
+        {
+            if (state == null)
+            {
+                minus();
+            }
+            else if (state != "-")
+            {
+                calculate();
+                minus();
+            }
+            textBox1.Focus();
+            textBox1.SelectAll();
+        }
+
+        private void btime_Click(object sender, EventArgs e)//*
+        {
+            if (state == null)
+            {
+                time();
+            }
+            else if (state != "*")
+            {
+                calculate();
+                time();
+            }
+            textBox1.Focus();
+            textBox1.SelectAll();
+        }
+
+        private void bdiv_Click(object sender, EventArgs e)//÷
+        {
+            if (state == null)
+            {
+                divide();
+            }
+            else if (state != "/")
+            {
+                calculate();
+                divide();
+            }
+            textBox1.Focus();
+            textBox1.SelectAll();
+        }
         #endregion
-        ///////////////////////////////////////////////////////////number
-        #region
+        //input events
+        #region input
         private void bnum1_Click(object sender, EventArgs e)//1
         {
             num = num * 10 + 1;
             update();
         }
-
         private void bnum2_Click(object sender, EventArgs e)//2
         {
             num = num * 10 + 2;
             update();
         }
-
         private void bnum3_Click(object sender, EventArgs e)//3
         {
             num = num * 10 + 3;
             update();
         }
-
         private void bnum4_Click(object sender, EventArgs e)//4
         {
             num = num * 10 + 4;
             update();
         }
-
         private void bnum5_Click(object sender, EventArgs e)//5
         {
             num = num * 10 + 5;
             update();
         }
-
         private void bnum6_Click(object sender, EventArgs e)//6
         {
             num = num * 10 + 6;
             update();
         }
-
         private void bnum7_Click(object sender, EventArgs e)//7
         {
             num = num * 10 + 7;
             update();
         }
-
         private void bnum8_Click(object sender, EventArgs e)//8
         {
             num = num * 10 + 8;
@@ -190,107 +240,96 @@ namespace form_idle
             num = num * 10 + 9;
             update();
         }
-
         private void bnum0_Click(object sender, EventArgs e)//0
         {
             num = num * 10;
             update();
         }
-        #endregion
-        ///////////////////////////////////////////////////////////calculate
-        #region
-        private void bplus_Click(object sender, EventArgs e)//+
+        private void bcalc_Click(object sender, EventArgs e)//=
         {
-            if (state == null)
-            {
-                update();
-                state = "+";
-                cnum = num;
-                num = 0;
-                label1.Text = Convert.ToString(cnum) + " +";
-                textBox1.Text = "0";
-            }
-            else if (state != "+")
-            {
-                state = "+";
-                label1.Text = Convert.ToString(cnum) + " +";
-            }
-            textBox1.Focus();
-            textBox1.SelectAll();
+            calculate();
+            update();
         }
-
-        private void bminus_Click(object sender, EventArgs e)//-
-        {
-            if (state == null)
-            {
-                update();
-                state = "-";
-                cnum = num;
-                num = 0;
-                label1.Text = Convert.ToString(cnum) + " -";
-                textBox1.Text = "0";
-            }
-            else if (state != "-")
-            {
-                state = "-";
-                label1.Text = Convert.ToString(cnum) + " -";
-            }
-            textBox1.Focus();
-            textBox1.SelectAll();
-        }
-
-        private void btime_Click(object sender, EventArgs e)//*
-        {
-            if (state == null)
-            {
-                update();
-                state = "*";
-                cnum = num;
-                num = 0;
-                label1.Text = Convert.ToString(cnum) + " X";
-                textBox1.Text = "0";
-            }
-            else if (state != "*")
-            {
-                state = "*";
-                label1.Text = Convert.ToString(cnum) + " X";
-            }
-            textBox1.Focus();
-            textBox1.SelectAll();
-        }
-
-        private void bdiv_Click(object sender, EventArgs e)//÷
-        {
-            if (state == null)
-            {
-                update();
-                state = "/";
-                cnum = num;
-                num = 0;
-                label1.Text = Convert.ToString(cnum) + " ÷";
-                textBox1.Text = "0";
-            }
-            else if (state != "/")
-            {
-                state = "/";
-                label1.Text = Convert.ToString(cnum) + " ÷";
-            }
-            textBox1.Focus();
-            textBox1.SelectAll();
-        }
-        #endregion
-        ///////////////////////////////////////////////////////////control
-        #region
+        #endregion number
+        //key presses detection
+        #region keypress detect
         private void bc_Click(object sender, EventArgs e)
         {
-            cnum = 0;
+            prev = 0;
             num = 0;
             state = null;
             label1.Text = null;
             textBox1.Text = Convert.ToString(num);
 
         }
+        private void bback_Click(object sender, EventArgs e)
+        {
 
+            if (textBox1.Text.Length == 1)
+            {
+                num = 0;
+                update();
+            }
+            else
+            {
+                num = Convert.ToDouble(num.ToString().Substring(0, num.ToString().Length - 1));
+            }
+            update();
+        }
+        private void Form1_KeyDown(object sender, KeyEventArgs e)
+        {
+            switch (e.KeyCode)
+            {
+                case Keys.Add:
+                    bplus_Click(null, null);
+                    break;
+                case Keys.Subtract:
+                    bminus_Click(null, null);
+                    break;
+                case Keys.Multiply:
+                    btime_Click(null, null);
+                    break;
+                case Keys.Divide:
+                    bdiv_Click(null, null);
+                    break;
+                case Keys.Return:
+                    bcalc_Click(null, null);
+                    break;
+            }
+            switch (e.KeyCode)
+            {
+                case Keys.NumPad0:
+                    bnum0_Click(null, null);
+                    break;
+                case Keys.NumPad1:
+                    bnum1_Click(null, null);
+                    break;
+                case Keys.NumPad2:
+                    bnum2_Click(null, null);
+                    break;
+                case Keys.NumPad3:
+                    bnum3_Click(null, null);
+                    break;
+                case Keys.NumPad4:
+                    bnum4_Click(null, null);
+                    break;
+                case Keys.NumPad5:
+                    bnum5_Click(null, null);
+                    break;
+                case Keys.NumPad6:
+                    bnum6_Click(null, null);
+                    break;
+                case Keys.NumPad7:
+                    bnum7_Click(null, null);
+                    break;
+                case Keys.NumPad8:
+                    bnum8_Click(null, null);
+                    break;
+                case Keys.NumPad9:
+                    bnum9_Click(null, null);
+                    break;
+            }
+        }
         private void textBox1_KeyDown(object sender, KeyEventArgs e)
         {
             switch (e.KeyCode)
@@ -308,37 +347,13 @@ namespace form_idle
                     bdiv_Click(null, null);
                     break;
                 case Keys.Return:
-                    bsame_Click(null, null);
+                    bcalc_Click(null, null);
                     break;
             }
         }
-
-        private void textBox1_KeyUp(object sender, KeyEventArgs e)
-        {
-            if (e.KeyCode == Keys.Add || e.KeyCode == Keys.Subtract || e.KeyCode == Keys.Multiply || e.KeyCode == Keys.Divide)
-            {
-                textBox1.Text = "0";
-                textBox1.SelectAll();
-            }
-        }
-
-        private void bback_Click(object sender, EventArgs e)
-        {
-
-            if (textBox1.Text.Length == 1)
-            {
-                num = 0;
-                textBox1.Text = "0";
-            }
-            else
-            {
-                textBox1.Text = textBox1.Text.Remove(textBox1.Text.Length - 1);
-            }
-            update();
-        }
         #endregion
-        ///////////////////////////////////////////////////////////utility
-        #region
+        //toolbar functions (WIP)
+        #region toolbar
         private void bxx_Click(object sender, EventArgs e)
         {
             if (func == false) textBox1.Text = Math.Pow(Convert.ToDouble(textBox1.Text), 2).ToString();
@@ -354,15 +369,15 @@ namespace form_idle
                 {
                     update();
                     state = "^";
-                    cnum = num;
+                    prev = num;
                     num = 0;
-                    label1.Text = Convert.ToString(cnum) + " ^";
+                    label1.Text = Convert.ToString(prev) + " ^";
                     textBox1.Text = "0";
                 }
                 else if (state != "^")
                 {
                     state = "^";
-                    label1.Text = Convert.ToString(cnum) + " ^";
+                    label1.Text = Convert.ToString(prev) + " ^";
                 }
                 textBox1.Focus();
                 textBox1.SelectAll();
@@ -373,15 +388,15 @@ namespace form_idle
                 {
                     update();
                     state = "√";
-                    cnum = num;
+                    prev = num;
                     num = 0;
-                    label1.Text = Convert.ToString(cnum) + " √";
+                    label1.Text = Convert.ToString(prev) + " √";
                     textBox1.Text = "0";
                 }
                 else if (state != "√")
                 {
                     state = "√";
-                    label1.Text = Convert.ToString(cnum) + " √";
+                    label1.Text = Convert.ToString(prev) + " √";
                 }
                 textBox1.Focus();
                 textBox1.SelectAll();
@@ -447,22 +462,21 @@ namespace form_idle
             {
                 if (state == null)
                 {
-                    update();
                     state = "√";
-                    cnum = num;
+                    prev = num;
                     num = 0;
-                    label1.Text = Convert.ToString(cnum) + " √";
-                    textBox1.Text = "0";
+                    label1.Text = Convert.ToString(prev) + " √";
+                    update();
                 }
                 else if (state != "√")
                 {
                     state = "√";
-                    label1.Text = Convert.ToString(cnum) + " √";
+                    label1.Text = Convert.ToString(prev) + " √";
                 }
                 textBox1.Focus();
                 textBox1.SelectAll();
             }
-            else { }
+            //else { }
         }
 
         private void b10n_Click(object sender, EventArgs e)
@@ -477,7 +491,23 @@ namespace form_idle
 
         private void bexp_Click(object sender, EventArgs e)
         {
+            if (func == false)
+            {
+                tempstate = "exp";
+                prev = num;
+                textBox1.Text += ".e+";
+                temptext = textBox1.Text;
+                num = 0;
+            }
+        }
 
+        private void bstep_Click(object sender, EventArgs e)
+        {
+            double tempn = 1;
+            if (num == 0) { num = 1; update(); }
+            else for (double n = 1; n <= num; n++) tempn = tempn * n;
+            num = tempn;
+            update();
         }
 
         private void bmod_Click(object sender, EventArgs e)
@@ -485,6 +515,12 @@ namespace form_idle
 
         }
         #endregion
+        //button function unrelated to calculation
+        #region misc
+        private void recordClear_Click(object sender, EventArgs e)
+        {
+            historyBox.Items.Clear();
+        } //history box clear
         private void bup_Click(object sender, EventArgs e)
         {
             if (func == false)
@@ -518,8 +554,7 @@ namespace form_idle
                 bmod.Text = "Mod";
             }
             update();
-        }
-
+        } //alt switch for toolbar
         private void bus_Click(object sender, EventArgs e)
         {
             if (neg == false)
@@ -532,18 +567,33 @@ namespace form_idle
                 textBox1.Text.Replace("-", string.Empty);
                 neg = false;
             }
-        }
-
+        } //negative assignemnt
         private void bce_Click(object sender, EventArgs e)
         {
             num = 0;
             textBox1.Text = Convert.ToString(num);
-        }
-
-        private void bsame_Click(object sender, EventArgs e)//=
+        } //clear
+        private void textBox1_KeyPress(object sender, KeyPressEventArgs e)
         {
-            calculate();
-        }
+            if (!char.IsControl(e.KeyChar) && !char.IsDigit(e.KeyChar) &&
+                (e.KeyChar != '.'))
+            {
+                e.Handled = true;
+            }
+
+            // only allow one decimal point
+            if ((e.KeyChar == '.') && ((sender as TextBox).Text.IndexOf('.') > -1))
+            {
+                e.Handled = true;
+            }
+
+            if ((e.KeyChar == '-') && ((sender as TextBox).Text.IndexOf('-') > -1))
+            {
+                e.Handled = true;
+            }
+        } //only allow numbers and one decimal point
+        #endregion
+
 
     }
 }

@@ -48,7 +48,7 @@ namespace form_idle
             this.bplus = new System.Windows.Forms.Button();
             this.bminus = new System.Windows.Forms.Button();
             this.btime = new System.Windows.Forms.Button();
-            this.bsame = new System.Windows.Forms.Button();
+            this.bcalc = new System.Windows.Forms.Button();
             this.blj = new System.Windows.Forms.Button();
             this.brj = new System.Windows.Forms.Button();
             this.bpi = new System.Windows.Forms.Button();
@@ -68,6 +68,7 @@ namespace form_idle
             this.label1 = new System.Windows.Forms.Label();
             this.historyBox = new System.Windows.Forms.ListBox();
             this.label2 = new System.Windows.Forms.Label();
+            this.recordClear = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
             // textBox1
@@ -79,7 +80,6 @@ namespace form_idle
             this.textBox1.TabIndex = 0;
             this.textBox1.KeyDown += new System.Windows.Forms.KeyEventHandler(this.textBox1_KeyDown);
             this.textBox1.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.textBox1_KeyPress);
-            this.textBox1.KeyUp += new System.Windows.Forms.KeyEventHandler(this.textBox1_KeyUp);
             // 
             // bnum1
             // 
@@ -87,7 +87,7 @@ namespace form_idle
             this.bnum1.BackgroundImageLayout = System.Windows.Forms.ImageLayout.None;
             this.bnum1.FlatAppearance.BorderColor = System.Drawing.SystemColors.ControlLightLight;
             this.bnum1.Font = new System.Drawing.Font("微軟正黑體", 12F);
-            this.bnum1.Location = new System.Drawing.Point(80, 256);
+            this.bnum1.Location = new System.Drawing.Point(81, 378);
             this.bnum1.Name = "bnum1";
             this.bnum1.Size = new System.Drawing.Size(57, 55);
             this.bnum1.TabIndex = 1;
@@ -101,7 +101,7 @@ namespace form_idle
             this.bnum2.BackgroundImageLayout = System.Windows.Forms.ImageLayout.None;
             this.bnum2.FlatAppearance.BorderColor = System.Drawing.SystemColors.ControlLightLight;
             this.bnum2.Font = new System.Drawing.Font("微軟正黑體", 12F);
-            this.bnum2.Location = new System.Drawing.Point(143, 256);
+            this.bnum2.Location = new System.Drawing.Point(142, 378);
             this.bnum2.Name = "bnum2";
             this.bnum2.Size = new System.Drawing.Size(57, 55);
             this.bnum2.TabIndex = 2;
@@ -115,7 +115,7 @@ namespace form_idle
             this.bnum3.BackgroundImageLayout = System.Windows.Forms.ImageLayout.None;
             this.bnum3.FlatAppearance.BorderColor = System.Drawing.SystemColors.ControlLightLight;
             this.bnum3.Font = new System.Drawing.Font("微軟正黑體", 12F);
-            this.bnum3.Location = new System.Drawing.Point(206, 256);
+            this.bnum3.Location = new System.Drawing.Point(205, 378);
             this.bnum3.Name = "bnum3";
             this.bnum3.Size = new System.Drawing.Size(57, 55);
             this.bnum3.TabIndex = 3;
@@ -171,7 +171,7 @@ namespace form_idle
             this.bnum7.BackgroundImageLayout = System.Windows.Forms.ImageLayout.None;
             this.bnum7.FlatAppearance.BorderColor = System.Drawing.SystemColors.ControlLightLight;
             this.bnum7.Font = new System.Drawing.Font("微軟正黑體", 12F);
-            this.bnum7.Location = new System.Drawing.Point(80, 378);
+            this.bnum7.Location = new System.Drawing.Point(81, 256);
             this.bnum7.Name = "bnum7";
             this.bnum7.Size = new System.Drawing.Size(57, 55);
             this.bnum7.TabIndex = 7;
@@ -185,7 +185,7 @@ namespace form_idle
             this.bnum8.BackgroundImageLayout = System.Windows.Forms.ImageLayout.None;
             this.bnum8.FlatAppearance.BorderColor = System.Drawing.SystemColors.ControlLightLight;
             this.bnum8.Font = new System.Drawing.Font("微軟正黑體", 12F);
-            this.bnum8.Location = new System.Drawing.Point(143, 378);
+            this.bnum8.Location = new System.Drawing.Point(142, 256);
             this.bnum8.Name = "bnum8";
             this.bnum8.Size = new System.Drawing.Size(57, 55);
             this.bnum8.TabIndex = 8;
@@ -199,7 +199,7 @@ namespace form_idle
             this.bnum9.BackgroundImageLayout = System.Windows.Forms.ImageLayout.None;
             this.bnum9.FlatAppearance.BorderColor = System.Drawing.SystemColors.ControlLightLight;
             this.bnum9.Font = new System.Drawing.Font("微軟正黑體", 12F);
-            this.bnum9.Location = new System.Drawing.Point(206, 378);
+            this.bnum9.Location = new System.Drawing.Point(205, 256);
             this.bnum9.Name = "bnum9";
             this.bnum9.Size = new System.Drawing.Size(57, 55);
             this.bnum9.TabIndex = 9;
@@ -316,17 +316,17 @@ namespace form_idle
             this.btime.UseVisualStyleBackColor = false;
             this.btime.Click += new System.EventHandler(this.btime_Click);
             // 
-            // bsame
+            // bcalc
             // 
-            this.bsame.BackColor = System.Drawing.SystemColors.ButtonFace;
-            this.bsame.Font = new System.Drawing.Font("微軟正黑體", 12F);
-            this.bsame.Location = new System.Drawing.Point(269, 439);
-            this.bsame.Name = "bsame";
-            this.bsame.Size = new System.Drawing.Size(56, 55);
-            this.bsame.TabIndex = 19;
-            this.bsame.Text = "=";
-            this.bsame.UseVisualStyleBackColor = false;
-            this.bsame.Click += new System.EventHandler(this.bsame_Click);
+            this.bcalc.BackColor = System.Drawing.SystemColors.ButtonFace;
+            this.bcalc.Font = new System.Drawing.Font("微軟正黑體", 12F);
+            this.bcalc.Location = new System.Drawing.Point(269, 439);
+            this.bcalc.Name = "bcalc";
+            this.bcalc.Size = new System.Drawing.Size(56, 55);
+            this.bcalc.TabIndex = 19;
+            this.bcalc.Text = "=";
+            this.bcalc.UseVisualStyleBackColor = false;
+            this.bcalc.Click += new System.EventHandler(this.bcalc_Click);
             // 
             // blj
             // 
@@ -371,6 +371,7 @@ namespace form_idle
             this.bstep.TabIndex = 23;
             this.bstep.Text = "n!";
             this.bstep.UseVisualStyleBackColor = false;
+            this.bstep.Click += new System.EventHandler(this.bstep_Click);
             // 
             // bus
             // 
@@ -533,7 +534,7 @@ namespace form_idle
             this.historyBox.ItemHeight = 20;
             this.historyBox.Location = new System.Drawing.Point(331, 75);
             this.historyBox.Name = "historyBox";
-            this.historyBox.Size = new System.Drawing.Size(211, 404);
+            this.historyBox.Size = new System.Drawing.Size(211, 424);
             this.historyBox.TabIndex = 0;
             // 
             // label2
@@ -545,6 +546,17 @@ namespace form_idle
             this.label2.TabIndex = 0;
             this.label2.Text = "歷程記錄";
             // 
+            // recordClear
+            // 
+            this.recordClear.Font = new System.Drawing.Font("微軟正黑體", 12F);
+            this.recordClear.Location = new System.Drawing.Point(435, 40);
+            this.recordClear.Name = "recordClear";
+            this.recordClear.Size = new System.Drawing.Size(50, 28);
+            this.recordClear.TabIndex = 43;
+            this.recordClear.Text = "清除";
+            this.recordClear.UseVisualStyleBackColor = true;
+            this.recordClear.Click += new System.EventHandler(this.recordClear_Click);
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
@@ -552,6 +564,7 @@ namespace form_idle
             this.BackColor = System.Drawing.SystemColors.ButtonShadow;
             this.BackgroundImageLayout = System.Windows.Forms.ImageLayout.None;
             this.ClientSize = new System.Drawing.Size(560, 507);
+            this.Controls.Add(this.recordClear);
             this.Controls.Add(this.label2);
             this.Controls.Add(this.historyBox);
             this.Controls.Add(this.label1);
@@ -571,7 +584,7 @@ namespace form_idle
             this.Controls.Add(this.bpi);
             this.Controls.Add(this.brj);
             this.Controls.Add(this.blj);
-            this.Controls.Add(this.bsame);
+            this.Controls.Add(this.bcalc);
             this.Controls.Add(this.btime);
             this.Controls.Add(this.bminus);
             this.Controls.Add(this.bplus);
@@ -591,10 +604,12 @@ namespace form_idle
             this.Controls.Add(this.bnum2);
             this.Controls.Add(this.bnum1);
             this.Controls.Add(this.textBox1);
+            this.KeyPreview = true;
             this.MaximizeBox = false;
             this.Name = "Form1";
             this.ShowIcon = false;
             this.Text = "工程小算盤";
+            this.KeyDown += new System.Windows.Forms.KeyEventHandler(this.Form1_KeyDown);
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -621,7 +636,7 @@ namespace form_idle
         private System.Windows.Forms.Button bplus;
         private System.Windows.Forms.Button bminus;
         private System.Windows.Forms.Button btime;
-        private System.Windows.Forms.Button bsame;
+        private System.Windows.Forms.Button bcalc;
         private System.Windows.Forms.Button blj;
         private System.Windows.Forms.Button brj;
         private System.Windows.Forms.Button bpi;
@@ -642,6 +657,7 @@ namespace form_idle
         private System.Windows.Forms.ListBox listBox1;
         private System.Windows.Forms.ListBox historyBox;
         private System.Windows.Forms.Label label2;
+        private System.Windows.Forms.Button recordClear;
     }
 }
 
